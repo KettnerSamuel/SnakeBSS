@@ -17,6 +17,8 @@ def init(game):
 # dostane data hry, vraci smer pohybu hada
 def move(game):
     
+    result = "Right"
+    
     moveRightPossible = True
     moveLeftPossible = True
     moveUpPossible = True
@@ -25,41 +27,52 @@ def move(game):
     ##### KONTROLY MOŽNÝCH POHYBŮ #####
     
     ### Kontrola hran hracího pole
-    if game["head"]["x"] == 0:
+    if game["you"]["head"]["x"] == 0:
         moveRightPossible = False
-    if game["head"]["x"] == game["board"]["width"] - 1:
+    if game["you"]["head"]["x"] == game["board"]["width"] - 1:
         moveLeftPossible = False
-    if game["head"]["y"] == 0:
+    if game["you"]["head"]["y"] == 0:
         moveDownPossible = False
-    if game["head"]["y"] == game["board"]["height"] - 1:
+    if game["you"]["head"]["y"] == game["board"]["height"] - 1:
         moveUpPossible = False
         
     ### Kontrola těla
-    if game["snakes"]["body"] != {}
-        for telo in game["snakes"]["body"]:
-            if game["head"]["x"] == telo["x"] - 1:
+    if not len(game["you"]["body"]) == 0:
+        for telo in game["you"]["body"]:
+            if game["you"]["head"]["x"] == telo["x"] - 1:
                 moveRightPossible = False
-            if game["head"]["x"] == telo["x"] + 1:
+            if game["you"]["head"]["x"] == telo["x"] + 1:
                 moveLeftPossible = False
-            if game["head"]["y"] == telo["y"] - 1:
+            if game["you"]["head"]["y"] == telo["y"] - 1:
                 moveDownPossible = False
-            if game["head"]["y"] == telo["y"] + 1:
+            if game["you"]["head"]["y"] == telo["y"] + 1:
                 moveUpPossible = False
     else:
         pass
             
     ### Kontrola překážek
-    if game["obstacles"] != {}:
+    if not len(game["board"]["obstacles"]) == 0:
         for prekazka in game["obstacles"]:
-            if game["head"]["x"] == prekazka["x"] - 1:
+            if game["you"]["head"]["x"] == prekazka["x"] - 1:
                 moveRightPossible = False
-            if game["head"]["x"] == prekazka["x"] + 1:
+            if game["you"]["head"]["x"] == prekazka["x"] + 1:
                 moveLeftPossible = False
-            if game["head"]["y"] == prekazka["y"] - 1:
+            if game["you"]["head"]["y"] == prekazka["y"] - 1:
                 moveDownPossible = False
-            if game["head"]["y"] == prekazka["y"] + 1:
+            if game["you"]["head"]["y"] == prekazka["y"] + 1:
                 moveUpPossible = False
     else:
         pass
+    
+    if moveUpPossible:
+        result = "Up"
+    elif moveDownPossible:
+        result = "Down"
+    elif moveRightPossible:
+        result = "Right"
+    elif moveLeftPossible:
+        result = "Left"
+        
+    print(result)
     
     return {'direction': result}
