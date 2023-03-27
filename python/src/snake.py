@@ -18,7 +18,8 @@ def init(game):
 def move(game):
     #
     # SEM UMISTUJTE SVUJ KOD
+    print(game ["food"["x"]]):
+        
     #
-
     # pro ukazku se vraci nahodny smer
-    return {'direction': random.choice(DIRECTIONS)}
+    
