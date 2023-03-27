@@ -58,7 +58,7 @@ def move(game):
             
     ### Kontrola překážek
     if not len(game["board"]["obstacles"]) == 0:
-        for prekazka in game["obstacles"]:
+        for prekazka in game["board"]["obstacles"]:
             if game["you"]["head"]["x"] == prekazka["x"] - 1 and game["you"]["head"]["y"] == prekazka["y"]:
                 moveRightPossible = False
             if game["you"]["head"]["x"] == prekazka["x"] + 1 and game["you"]["head"]["y"] == prekazka["y"]:
