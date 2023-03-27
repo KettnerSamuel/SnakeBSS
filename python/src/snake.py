@@ -43,18 +43,18 @@ def move(game):
     ### Kontrola našeho těla
     if not len(game["you"]["body"]) == 0:
         for segmentTela in game["you"]["body"]:
-            if game["you"]["head"]["x"] - 1 == segmentTela["x"]:
+            if game["you"]["head"]["x"] - 1 == segmentTela["x"] and game["you"]["head"]["y"] == segmentTela["y"]:
                 moveLeftPossible = False
-                print("vlevo je telo")
-            if game["you"]["head"]["x"] + 1 == segmentTela["x"]:
+                print("vlevo je telo", segmentTela["x"], segmentTela["y"])
+            if game["you"]["head"]["x"] + 1 == segmentTela["x"] and game["you"]["head"]["y"] == segmentTela["y"]:
                 moveRightPossible = False
-                print("vpravo je telo")
-            if game["you"]["head"]["y"] - 1 == segmentTela["y"]:
+                print("vpravo je telo", segmentTela["x"], segmentTela["y"])
+            if game["you"]["head"]["y"] - 1 == segmentTela["y"] and game["you"]["head"]["x"] == segmentTela["x"]:
                 moveDownPossible = False
-                print("dole je telo")
-            if game["you"]["head"]["y"] + 1 == segmentTela["y"]:
+                print("dole je telo", segmentTela["x"], segmentTela["y"])
+            if game["you"]["head"]["y"] + 1 == segmentTela["y"] and game["you"]["head"]["x"] == segmentTela["x"]:
                 moveUpPossible = False
-                print("nahore je telo")
+                print("nahore je telo", segmentTela["x"], segmentTela["y"])
             
     ### Kontrola překážek
     if not len(game["board"]["obstacles"]) == 0:
@@ -134,8 +134,8 @@ def move(game):
             result = "Down"
         print("ZADNE JIDLO")
             
-            
-    print(game["board"]["you"])
+    
+    #print(game["you"])
     print(moveRightPossible , "mozno do prava")
     print(moveLeftPossible , "mozno do leva")
     print(moveUpPossible  , "mozno nahoru")
