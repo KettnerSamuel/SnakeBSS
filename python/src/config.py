@@ -1,2 +1,2 @@
-PORT = 6003
-NAME = "Had týmu #3"
+PORT = 6004
+NAME = "Had týmu #4"
