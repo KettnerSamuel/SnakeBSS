@@ -36,7 +36,7 @@ def move(game):
     if game["you"]["head"]["y"] == game["board"]["height"] - 1:
         moveUpPossible = False
         
-    ### Kontrola těla
+    ### Kontrola našeho těla
     if not len(game["you"]["body"]) == 0:
         for telo in game["you"]["body"]:
             if game["you"]["head"]["x"] == telo["x"] - 1:
@@ -49,6 +49,30 @@ def move(game):
                 moveUpPossible = False
     else:
         pass
+    
+    ### Kontrola nepřátelského hada
+    if not len(game["board"]["snakes"]) == 0:
+        for had in game["board"]["snakes"]:
+            ### Kontrola hlavy nepřátelského hada
+            if game["you"]["head"]["x"] == had["head"]["x"] - 1:
+                moveRightPossible = False
+            if game["you"]["head"]["x"] == had["head"]["x"] + 1:
+                moveLeftPossible = False
+            if game["you"]["head"]["y"] == had["head"]["y"] - 1:
+                moveDownPossible = False
+            if game["you"]["head"]["y"] == had["head"]["y"] + 1:
+                moveUpPossible = False
+                
+            ### Kontrola těla nepřátelského hada
+            for teloHada in had["body"]:
+                if game["you"]["head"]["x"] == teloHada["x"] - 1:
+                    moveRightPossible = False
+                if game["you"]["head"]["x"] == teloHada["x"] + 1:
+                    moveLeftPossible = False
+                if game["you"]["head"]["y"] == teloHada["y"] - 1:
+                    moveDownPossible = False
+                if game["you"]["head"]["y"] == teloHada["y"] + 1:
+                    moveUpPossible = False
             
     ### Kontrola překážek
     if not len(game["board"]["obstacles"]) == 0:
@@ -63,15 +87,6 @@ def move(game):
                 moveUpPossible = False
     else:
         pass
-    
-    if moveUpPossible:
-        result = "Up"
-    elif moveDownPossible:
-        result = "Down"
-    elif moveRightPossible:
-        result = "Right"
-    elif moveLeftPossible:
-        result = "Left"
         
     ##### POHYB SMĚREM K JÍDLU #####
     if game["you"]["head"]["x"] + game["board"]["food"]["x"] > game["you"]["head"]["y"] + game["board"]["food"]["y"]:
@@ -127,7 +142,7 @@ def move(game):
                         result = 'Left'
                 else:
                     pass
-     elif game["you"]["head"]["x"] + game["board"]["food"]["x"] == game["you"]["head"]["y"] + game["board"]["food"]["y"]:
+    elif game["you"]["head"]["x"] + game["board"]["food"]["x"] == game["you"]["head"]["y"] + game["board"]["food"]["y"]:
         pass
 
     print(result)
