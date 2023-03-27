@@ -29,24 +29,32 @@ def move(game):
     ### Kontrola hran hracího pole
     if game["you"]["head"]["x"] == 0:
         moveLeftPossible = False
+        print("Nejde doleva")
     if game["you"]["head"]["x"] == game["board"]["width"] - 1:
         moveRightPossible = False
+        print("Nejde doprava")
     if game["you"]["head"]["y"] == 0:
         moveDownPossible = False
+        print("Nejde dolu")
     if game["you"]["head"]["y"] == game["board"]["height"] - 1:
         moveUpPossible = False
+        print("Nejde nahoru")
         
     ### Kontrola našeho těla
     if not len(game["you"]["body"]) == 0:
-        for telo in game["you"]["body"]:
-            if game["you"]["head"]["x"] == telo["x"] - 1:
-                moveRightPossible = False
-            if game["you"]["head"]["x"] == telo["x"] + 1:
+        for segmentTela in game["you"]["body"]:
+            if game["you"]["head"]["x"] - 1 == segmentTela["x"]:
                 moveLeftPossible = False
-            if game["you"]["head"]["y"] == telo["y"] - 1:
+                print("vlevo je telo")
+            if game["you"]["head"]["x"] + 1 == segmentTela["x"]:
+                moveRightPossible = False
+                print("vpravo je telo")
+            if game["you"]["head"]["y"] - 1 == segmentTela["y"]:
                 moveDownPossible = False
-            if game["you"]["head"]["y"] == telo["y"] + 1:
+                print("dole je telo")
+            if game["you"]["head"]["y"] + 1 == segmentTela["y"]:
                 moveUpPossible = False
+                print("nahore je telo")
             
     ### Kontrola překážek
     if not len(game["board"]["obstacles"]) == 0:
@@ -62,6 +70,7 @@ def move(game):
                 
     ##### JDE PO JIDLE #####
     if not len(game["board"]["food"]) == 0:
+        print("JE JIDLO")
         ### Pokud je jídlo v levo od hlavy
         if game["board"]["food"][0]["x"] < game["you"]["head"]["x"]:
             if moveLeftPossible:
@@ -72,6 +81,8 @@ def move(game):
                 result = "Down"
             elif moveRightPossible:
                 result = "Right"
+                    
+            print("JIDLO VLEVO")
                     
         ### Pokud je jídlo v pravo od hlavy
         elif game["board"]["food"][0]["x"] > game["you"]["head"]["x"]:
@@ -84,6 +95,8 @@ def move(game):
             elif moveLeftPossible:
                 result = "Left"
                         
+            print("JIDLO VPRAVO")
+                        
         ### Pokud je jídlo pod hlavou
         elif game["board"]["food"][0]["y"] < game["you"]["head"]["y"]:
             if moveDownPossible:
@@ -94,9 +107,11 @@ def move(game):
                 result = "Right"
             elif moveUpPossible:
                 result = "Up"
-                  
+                
+            print("JIDLO POD HLAVOU")
+                
         ### Pokud je jídlo nad hlavou
-        elif game["board"]["food"][0]["x"] > game["you"]["head"]["x"]:
+        elif game["board"]["food"][0]["y"] > game["you"]["head"]["y"]:
             if moveUpPossible:
                 result = "Up"
             elif moveLeftPossible:
@@ -105,6 +120,8 @@ def move(game):
                 result = "Right"
             elif moveDownPossible:
                 result = "Down"
+                
+            print("JIDLO NAD HLAVOU")
         
     else:
         if moveRightPossible:
@@ -115,10 +132,13 @@ def move(game):
             result = "Up"
         if moveDownPossible:
             result = "Down"
+        print("ZADNE JIDLO")
             
-    print(moveRightPossible)
-    print(moveLeftPossible)
-    print(moveUpPossible)
-    print(moveDownPossible)
+            
+    print(game["board"]["you"])
+    print(moveRightPossible , "mozno do prava")
+    print(moveLeftPossible , "mozno do leva")
+    print(moveUpPossible  , "mozno nahoru")
+    print(moveDownPossible  , "mozno dolu")
     print(result)
     return {'direction': result}
