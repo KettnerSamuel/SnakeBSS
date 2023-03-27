@@ -17,7 +17,7 @@ def init(game):
 # dostane data hry, vraci smer pohybu hada
 def move(game):
     
-    result = "Right"
+    
     
     moveRightPossible = True
     moveLeftPossible = True
@@ -28,13 +28,21 @@ def move(game):
     
     ### Kontrola hran hracího pole
     if game["you"]["head"]["x"] == 0:
-        moveRightPossible = False
-    if game["you"]["head"]["x"] == game["board"]["width"] - 1:
         moveLeftPossible = False
+        
+    if game["you"]["head"]["x"] == game["board"]["width"] - 1:
+        moveRightPossible = False
+        
     if game["you"]["head"]["y"] == 0:
         moveDownPossible = False
+        
     if game["you"]["head"]["y"] == game["board"]["height"] - 1:
         moveUpPossible = False
+        
+    
+    if moveLeftPossible == True:
+        if moveUpPossible == False:
+            
         
     ### Kontrola těla
     if not len(game["you"]["body"]) == 0:
@@ -64,73 +72,50 @@ def move(game):
     else:
         pass
     
-    if moveUpPossible:
-        result = "Up"
-    elif moveDownPossible:
-        result = "Down"
-    elif moveRightPossible:
-        result = "Right"
-    elif moveLeftPossible:
-        result = "Left"
+    
         
     ##### POHYB SMĚREM K JÍDLU #####
     if len(game["board"]["food"]) > 0:
-        if game["you"]["head"]["x"] + game["board"]["food"][0]["x"] > game["you"]["head"]["y"] + game["board"]["food"][0]["y"]:
-            if game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
-                if moveLeftPossible == True:
-                    result = 'Left'
-                else:
-                    if game["you"]["head"]["y"] < game["board"]["food"][0]["y"]:
-                        if moveUpPossible == True:
-                            result = 'Up'
-                    elif game["you"]["head"]["y"] > game["board"]["food"][0]["y"]:
-                        if moveDownPossible == True:
-                            result = 'Down'
-                    else:
-                        pass
-                    
-            elif game["you"]["head"]["x"] > game["board"]["food"][0]["x"]:
-                if moveRightPossible == True:
-                    result = 'Right'
-                else:
-                    if game["you"]["head"]["y"] < game["board"]["food"][0]["y"]:
-                        if moveUpPossible == True:
-                            result = 'Up'
-                    elif game["you"]["head"]["y"] > game["board"]["food"][0]["y"]:
-                        if moveDownPossible == True:
-                            result = 'Down'
-                    else:
-                        pass
-                    
-        elif game["you"]["head"]["x"] - game["board"]["food"][0]["x"] < game["you"]["head"]["y"] - game["board"]["food"][0]["y"]:
-            if game["you"]["head"]["y"] < game["board"]["food"][0]["y"]:
+        
+        if game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
+            if moveRightPossible == True:
+                result = 'Right'
+            elif game["you"]["head"]["y"] < game["board"]["food"][0]["y"]:
                 if moveUpPossible == True:
                     result = 'Up'
-                else:
-                    if game["you"]["head"]["x"] > game["board"]["food"][0]["x"]:
-                        if moveRightPossible == True:
-                            result = 'Right'
-                    elif game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
-                        if moveLefttPossible == True:
-                            result = 'Left'
-                    else:
-                        pass
-                            
-            elif game["you"]["head"]["y"] > game["board"]["food"][0]["y"]:
+            else:
                 if moveDownPossible == True:
                     result = 'Down'
-                else:
-                    if game["you"]["head"]["x"] > game["board"]["food"][0]["x"]:
-                        if moveRightPossible == True:
-                            result = 'Right'
-                    elif game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
-                        if moveLefttPossible == True:
-                            result = 'Left'
-                    else:
-                        pass
-        else:
-            pass
-
+                    
+        elif game["you"]["head"]["x"] > game["board"]["food"][0]["x"]:
+            if moveLeftPossible == True:
+                result = 'Left'
+            elif game["you"]["head"]["y"] < game["board"]["food"][0]["y"]:
+                if moveUpPossible == True:
+                    result = 'Up'
+            else:
+                if moveDownPossible == True:
+                    result = 'Down'
+                    
+        elif game["you"]["head"]["y"] < game["board"]["food"][0]["y"]:
+            if moveUpPossible == True:
+                result = 'Up'
+            elif game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
+                if moveRightPossible == True:
+                    result = 'Right'
+            else:
+                if moveLeftPossible == True:
+                    result = 'Left'
+                    
+        elif game["you"]["head"]["y"] > game["board"]["food"][0]["y"]:
+            if moveLeftPossible == True:
+                result = 'Left'
+            elif game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
+                if moveRightPossible == True:
+                    result = 'Right'
+            else:
+                if moveLeftPossible == True:
+                    result = 'Left'
 
     print(result)
     
