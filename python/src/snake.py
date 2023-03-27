@@ -73,12 +73,7 @@ def move(game):
     elif moveLeftPossible:
         result = "Left"
         
-    print(result)
-    
-    return {'direction': result}
-
-    #
-    # SEM UMISTUJTE SVUJ KOD
+    ##### POHYB SMĚREM K JÍDLU #####
     if game["you"]["head"]["x"] + game["board"]["food"]["x"] > game["you"]["head"]["y"] + game["board"]["food"]["y"]:
         if game["you"]["head"]["x"] < game["board"]["food"]["x"]:
             if moveLefttPossible == True:
@@ -134,7 +129,7 @@ def move(game):
                     pass
      elif game["you"]["head"]["x"] + game["board"]["food"]["x"] == game["you"]["head"]["y"] + game["board"]["food"]["y"]:
         pass
-    #
+
+    print(result)
     
-    # pro ukazku se vraci nahodny smer
-    
+    return {'direction': result}
