@@ -17,7 +17,7 @@ def init(game):
 # dostane data hry, vraci smer pohybu hada
 def move(game):
     
-    result = "Right"
+    result = None
     
     moveRightPossible = True
     moveLeftPossible = True
@@ -28,9 +28,9 @@ def move(game):
     
     ### Kontrola hran hracího pole
     if game["you"]["head"]["x"] == 0:
-        moveRightPossible = False
-    if game["you"]["head"]["x"] == game["board"]["width"] - 1:
         moveLeftPossible = False
+    if game["you"]["head"]["x"] == game["board"]["width"] - 1:
+        moveRightPossible = False
     if game["you"]["head"]["y"] == 0:
         moveDownPossible = False
     if game["you"]["head"]["y"] == game["board"]["height"] - 1:
@@ -126,7 +126,7 @@ def move(game):
                         if moveRightPossible == True:
                             result = 'Right'
                     elif game["you"]["head"]["x"] < game["board"]["food"][0]["x"]:
-                        if moveLefttPossible == True:
+                        if moveLeftPossible == True:
                             result = 'Left'
                     else:
                         pass
