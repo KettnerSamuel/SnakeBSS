@@ -59,13 +59,13 @@ def move(game):
     ### Kontrola překážek
     if not len(game["board"]["obstacles"]) == 0:
         for prekazka in game["obstacles"]:
-            if game["you"]["head"]["x"] == prekazka["x"] - 1:
+            if game["you"]["head"]["x"] == prekazka["x"] - 1 and game["you"]["head"]["y"] == prekazka["y"]:
                 moveRightPossible = False
-            if game["you"]["head"]["x"] == prekazka["x"] + 1:
+            if game["you"]["head"]["x"] == prekazka["x"] + 1 and game["you"]["head"]["y"] == prekazka["y"]:
                 moveLeftPossible = False
-            if game["you"]["head"]["y"] == prekazka["y"] - 1:
+            if game["you"]["head"]["y"] == prekazka["y"] - 1 and game["you"]["head"]["x"] == prekazka["x"]:
                 moveDownPossible = False
-            if game["you"]["head"]["y"] == prekazka["y"] + 1:
+            if game["you"]["head"]["y"] == prekazka["y"] + 1 and game["you"]["head"]["x"] == prekazka["x"]:
                 moveUpPossible = False
                 
     ##### JDE PO JIDLE #####
