@@ -16,9 +16,50 @@ def init(game):
 
 # dostane data hry, vraci smer pohybu hada
 def move(game):
-    #
-    # SEM UMISTUJTE SVUJ KOD
-    #
-
-    # pro ukazku se vraci nahodny smer
-    return {'direction': random.choice(DIRECTIONS)}
+    
+    moveRightPossible = True
+    moveLeftPossible = True
+    moveUpPossible = True
+    moveDownPossible = True
+    
+    ##### KONTROLY MOŽNÝCH POHYBŮ #####
+    
+    ### Kontrola hran hracího pole
+    if game["head"]["x"] == 0:
+        moveRightPossible = False
+    if game["head"]["x"] == game["board"]["width"] - 1:
+        moveLeftPossible = False
+    if game["head"]["y"] == 0:
+        moveDownPossible = False
+    if game["head"]["y"] == game["board"]["height"] - 1:
+        moveUpPossible = False
+        
+    ### Kontrola těla
+    if game["snakes"]["body"] != {}
+        for telo in game["snakes"]["body"]:
+            if game["head"]["x"] == telo["x"] - 1:
+                moveRightPossible = False
+            if game["head"]["x"] == telo["x"] + 1:
+                moveLeftPossible = False
+            if game["head"]["y"] == telo["y"] - 1:
+                moveDownPossible = False
+            if game["head"]["y"] == telo["y"] + 1:
+                moveUpPossible = False
+    else:
+        pass
+            
+    ### Kontrola překážek
+    if game["obstacles"] != {}:
+        for prekazka in game["obstacles"]:
+            if game["head"]["x"] == prekazka["x"] - 1:
+                moveRightPossible = False
+            if game["head"]["x"] == prekazka["x"] + 1:
+                moveLeftPossible = False
+            if game["head"]["y"] == prekazka["y"] - 1:
+                moveDownPossible = False
+            if game["head"]["y"] == prekazka["y"] + 1:
+                moveUpPossible = False
+    else:
+        pass
+    
+    return {'direction': result}
