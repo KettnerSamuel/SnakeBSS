@@ -72,7 +72,15 @@ def move(game):
     if not len(game["board"]["food"]) == 0:
         print("JE JIDLO")
         ### Pokud je jídlo v levo od hlavy
-        if game["board"]["food"][0]["x"] < game["you"]["head"]["x"]:
+        i=0
+        dalsiJidlo = game["board"]["food"][0]
+        for jidlo in game["board"]["food"]:
+            i += 1
+            if jidlo["x"] <= dalsiJidlo["x"] and jidlo["y"] <= dalsiJidlo["y"]:
+                dalsiJidlo = jidlo
+            blizkeJidlo = dalsiJidlo
+                
+        if blizkeJidlo["x"] < game["you"]["head"]["x"]:
             if moveLeftPossible:
                 result = "Left"
             elif moveUpPossible:
@@ -85,7 +93,7 @@ def move(game):
             print("JIDLO VLEVO")
                     
         ### Pokud je jídlo v pravo od hlavy
-        elif game["board"]["food"][0]["x"] > game["you"]["head"]["x"]:
+        elif blizkeJidlo["x"] > game["you"]["head"]["x"]:
             if moveRightPossible:
                 result = "Right"
             elif moveUpPossible:
@@ -98,7 +106,7 @@ def move(game):
             print("JIDLO VPRAVO")
                         
         ### Pokud je jídlo pod hlavou
-        elif game["board"]["food"][0]["y"] < game["you"]["head"]["y"]:
+        elif blizkeJidlo["y"] < game["you"]["head"]["y"]:
             if moveDownPossible:
                 result = "Down"
             elif moveLeftPossible:
@@ -111,7 +119,7 @@ def move(game):
             print("JIDLO POD HLAVOU")
                 
         ### Pokud je jídlo nad hlavou
-        elif game["board"]["food"][0]["y"] > game["you"]["head"]["y"]:
+        elif blizkeJidlo["y"] > game["you"]["head"]["y"]:
             if moveUpPossible:
                 result = "Up"
             elif moveLeftPossible:
