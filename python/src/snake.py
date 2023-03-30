@@ -27,48 +27,53 @@ def move(game):
     ##### KONTROLY MOŽNÝCH POHYBŮ #####
     
     def moveCheck(game, head):
-            if head["x"] == 0:
-                moveLeftPossible = False
-                print("Nejde doleva")
-            if head["x"] == game["board"]["width"] - 1:
-                moveRightPossible = False
-                print("Nejde doprava")
-            if head["y"] == 0:
-                moveDownPossible = False
-                print("Nejde dolu")
-            if head["y"] == game["board"]["height"] - 1:
-                moveUpPossible = False
-                print("Nejde nahoru")
+        moveRightPossible = True
+        moveLeftPossible = True
+        moveUpPossible = True
+        moveDownPossible = True
+        
+        if head["x"] == 0:
+            moveLeftPossible = False
+            print("Nejde doleva")
+        if head["x"] == game["board"]["width"] - 1:
+            moveRightPossible = False
+            print("Nejde doprava")
+        if head["y"] == 0:
+            moveDownPossible = False
+            print("Nejde dolu")
+        if head["y"] == game["board"]["height"] - 1:
+            moveUpPossible = False
+            print("Nejde nahoru")
+            
+        ### Kontrola našeho těla
+        if not len(game["you"]["body"]) == 0:
+            for segmentTela in game["you"]["body"]:
+                if head["x"] - 1 == segmentTela["x"] and head["y"] == segmentTela["y"]:
+                    moveLeftPossible = False
+                    print("vlevo je telo", segmentTela["x"], segmentTela["y"])
+                if head["x"] + 1 == segmentTela["x"] and head["y"] == segmentTela["y"]:
+                    moveRightPossible = False
+                    print("vpravo je telo", segmentTela["x"], segmentTela["y"])
+                if head["y"] - 1 == segmentTela["y"] and head["x"] == segmentTela["x"]:
+                    moveDownPossible = False
+                    print("dole je telo", segmentTela["x"], segmentTela["y"])
+                if head["y"] + 1 == segmentTela["y"] and head["x"] == segmentTela["x"]:
+                    moveUpPossible = False
+                    print("nahore je telo", segmentTela["x"], segmentTela["y"])
                 
-            ### Kontrola našeho těla
-            if not len(game["you"]["body"]) == 0:
-                for segmentTela in game["you"]["body"]:
-                    if head["x"] - 1 == segmentTela["x"] and head["y"] == segmentTela["y"]:
-                        moveLeftPossible = False
-                        print("vlevo je telo", segmentTela["x"], segmentTela["y"])
-                    if head["x"] + 1 == segmentTela["x"] and head["y"] == segmentTela["y"]:
-                        moveRightPossible = False
-                        print("vpravo je telo", segmentTela["x"], segmentTela["y"])
-                    if head["y"] - 1 == segmentTela["y"] and head["x"] == segmentTela["x"]:
-                        moveDownPossible = False
-                        print("dole je telo", segmentTela["x"], segmentTela["y"])
-                    if head["y"] + 1 == segmentTela["y"] and head["x"] == segmentTela["x"]:
-                        moveUpPossible = False
-                        print("nahore je telo", segmentTela["x"], segmentTela["y"])
+        ### Kontrola překážek
+        if not len(game["board"]["obstacles"]) == 0:
+            for prekazka in game["board"]["obstacles"]:
+                if head["x"] + 1 == prekazka["x"] and head["y"] == prekazka["y"]:
+                    moveRightPossible = False
+                if head["x"] - 1 == prekazka["x"] and head["y"] == prekazka["y"]:
+                    moveLeftPossible = False
+                if head["y"] - 1 == prekazka["y"] and head["x"] == prekazka["x"]:
+                    moveDownPossible = False
+                if head["y"] + 1 == prekazka["y"] and head["x"] == prekazka["x"]:
+                    moveUpPossible = False
                     
-            ### Kontrola překážek
-            if not len(game["board"]["obstacles"]) == 0:
-                for prekazka in game["board"]["obstacles"]:
-                    if head["x"] + 1 == prekazka["x"] and head["y"] == prekazka["y"]:
-                        moveRightPossible = False
-                    if head["x"] - 1 == prekazka["x"] and head["y"] == prekazka["y"]:
-                        moveLeftPossible = False
-                    if head["y"] - 1 == prekazka["y"] and head["x"] == prekazka["x"]:
-                        moveDownPossible = False
-                    if head["y"] + 1 == prekazka["y"] and head["x"] == prekazka["x"]:
-                        moveUpPossible = False
-                        
-            return moveUpPossible, moveDownPossible, moveLeftPossible, moveRightPossible
+        return moveUpPossible, moveDownPossible, moveLeftPossible, moveRightPossible
     
     ### Kontrola hran hracího pole
     if game["you"]["head"]["x"] == 0:
@@ -126,12 +131,14 @@ def move(game):
                 
         if not len(game["you"]["body"]) == 0:
             if blizkeJidlo["x"] < game["you"]["head"]["x"]:
+				### Pokud jde do leva
                 if moveLeftPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] <= game["you"]["head"]["x"]:
+                        if segmentTela["x"] < game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VLEVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] > segmentTela["x"]:
                                 head["x"] -= ind
                                 possible = moveCheck(game, head)[2]
@@ -142,12 +149,15 @@ def move(game):
                                 pass
                         else:
                             result = "Left"
+							
+				### Pokud nejde do leva
                 elif moveUpPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] >= game["you"]["head"]["y"]:
+                        if segmentTela["y"] > game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE NAHORE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] < segmentTela["y"]:
                                 head["y"] += ind
                                 possible = moveCheck(game, head)[0]
@@ -158,12 +168,15 @@ def move(game):
                                 pass
                         else:
                             result = "Up"
+							
+				### Pokud Nejde do leva ani nahoru
                 elif moveDownPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] <= game["you"]["head"]["y"]:
+                        if segmentTela["y"] < game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE DOLE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] > segmentTela["y"]:
                                 head["y"] -= ind
                                 possible = moveCheck(game, head)[1]
@@ -174,12 +187,15 @@ def move(game):
                                 pass
                         else:
                             result = "Down"
+							
+				### Pokud nejde do leva, do prava ani dolů
                 elif moveRightPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] >= game["you"]["head"]["x"]:
+                        if segmentTela["x"] > game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VPRAVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] < segmentTela["x"]:
                                 head["x"] += ind
                                 possible = moveCheck(game, head)[3]
@@ -194,12 +210,14 @@ def move(game):
                         
             ### Pokud je jídlo v pravo od hlavy
             elif blizkeJidlo["x"] > game["you"]["head"]["x"]:
+				### Pokud jde do prava
                 if moveRightPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] >= game["you"]["head"]["x"]:
+                        if segmentTela["x"] > game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VPRAVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] < segmentTela["x"]:
                                 head["x"] += ind
                                 possible = moveCheck(game, head)[3]
@@ -210,12 +228,15 @@ def move(game):
                                 pass
                         else:
                             result = "Right"
+				
+				### Pokud nejde do prava
                 elif moveUpPossible:
                    for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] >= game["you"]["head"]["y"]:
+                        if segmentTela["y"] > game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE NAHORE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] < segmentTela["y"]:
                                 head["y"] += ind
                                 possible = moveCheck(game, head)[0]
@@ -226,12 +247,15 @@ def move(game):
                                 pass
                         else:
                             result = "Up"
+							
+				### Pokud nejde do prava ani dolů
                 elif moveDownPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] <= game["you"]["head"]["y"]:
+                        if segmentTela["y"] < game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE DOLE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] > segmentTela["y"]:
                                 head["y"] -= ind
                                 possible = moveCheck(game, head)[1]
@@ -242,12 +266,15 @@ def move(game):
                                 pass
                         else:
                             result = "Down"
+							
+				### Pokud nejde do prava, dolů ani do leva
                 elif moveLeftPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] <= game["you"]["head"]["x"]:
+                        if segmentTela["x"] < game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VLEVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] > segmentTela["x"]:
                                 head["x"] -= ind
                                 possible = moveCheck(game, head)[2]
@@ -263,12 +290,14 @@ def move(game):
                             
             ### Pokud je jídlo pod hlavou
             elif blizkeJidlo["y"] < game["you"]["head"]["y"]:
+				### Pokud jde dolů
                 if moveDownPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] <= game["you"]["head"]["y"]:
+                        if segmentTela["y"] < game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE DOLE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] > segmentTela["y"]:
                                 head["y"] -= ind
                                 possible = moveCheck(game, head)[1]
@@ -279,12 +308,15 @@ def move(game):
                                 pass
                         else:
                             result = "Down"
+							
+				### Pokud nejde dolů
                 elif moveLeftPossible:
                    for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] <= game["you"]["head"]["x"]:
+                        if segmentTela["x"] < game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VLEVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] > segmentTela["x"]:
                                 head["x"] -= ind
                                 possible = moveCheck(game, head)[2]
@@ -295,12 +327,15 @@ def move(game):
                                 pass
                         else:
                             result = "Left"
+							
+				### Pokud nejde dolů ani do leva
                 elif moveRightPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] >= game["you"]["head"]["x"]:
+                        if segmentTela["x"] > game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VPRAVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] < segmentTela["x"]:
                                 head["x"] += ind
                                 possible = moveCheck(game, head)[3]
@@ -311,12 +346,15 @@ def move(game):
                                 pass
                         else:
                             result = "Right"
+							
+				### Pokud nejde dolů, do leva ani do prava
                 elif moveUpPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] >= game["you"]["head"]["y"]:
+                        if segmentTela["y"] > game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE NAHORE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] < segmentTela["y"]:
                                 head["y"] += ind
                                 possible = moveCheck(game, head)[0]
@@ -332,12 +370,14 @@ def move(game):
                     
             ### Pokud je jídlo nad hlavou
             elif blizkeJidlo["y"] > game["you"]["head"]["y"]:
+				### Pokud jde nahoru
                 if moveUpPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] >= game["you"]["head"]["y"]:
+                        if segmentTela["y"] > game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE NAHORE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] < segmentTela["y"]:
                                 head["y"] += ind
                                 possible = moveCheck(game, head)[0]
@@ -348,12 +388,15 @@ def move(game):
                                 pass
                         else:
                             result = "Up"
+							
+				### Pokud nejde nahoru
                 elif moveLeftPossible:
                    for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] <= game["you"]["head"]["x"]:
+                        if segmentTela["x"] < game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VLEVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] > segmentTela["x"]:
                                 head["x"] -= ind
                                 possible = moveCheck(game, head)[2]
@@ -364,12 +407,15 @@ def move(game):
                                 pass
                         else:
                             result = "Left"
+							
+				### Pokud nejde nahoru ani do leva
                 elif moveRightPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] >= game["you"]["head"]["x"]:
+                        if segmentTela["x"] > game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VPRAVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] < segmentTela["x"]:
                                 head["x"] += ind
                                 possible = moveCheck(game, head)[3]
@@ -380,12 +426,15 @@ def move(game):
                                 pass
                         else:
                             result = "Right"
+							
+				### Pokud nejde nahoru, do leva ani do prava
                 elif moveDownPossible:
                     for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] <= game["you"]["head"]["y"]:
+                        if segmentTela["y"] < game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE DOLE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] > segmentTela["y"]:
                                 head["y"] -= ind
                                 possible = moveCheck(game, head)[1]
@@ -453,10 +502,11 @@ def move(game):
         if not len(game["you"]["body"]) == 0:
             if moveRightPossible:
                 for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] >= game["you"]["head"]["x"]:
+                        if segmentTela["x"] > game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VPRAVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] < segmentTela["x"]:
                                 head["x"] += ind
                                 possible = moveCheck(game, head)[3]
@@ -469,10 +519,11 @@ def move(game):
                             result = "Right"
             if moveLeftPossible:
                 for segmentTela in game["you"]["body"]:
-                        if segmentTela["x"] <= game["you"]["head"]["x"]:
+                        if segmentTela["x"] < game["you"]["head"]["x"]:
                             print("SEGMENT NEKDE VLEVO!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["x"] > segmentTela["x"]:
                                 head["x"] -= ind
                                 possible = moveCheck(game, head)[2]
@@ -485,10 +536,11 @@ def move(game):
                             result = "Left"
             if moveUpPossible:
                 for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] >= game["you"]["head"]["y"]:
+                        if segmentTela["y"] > game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE NAHORE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] < segmentTela["y"]:
                                 head["y"] += ind
                                 possible = moveCheck(game, head)[0]
@@ -501,10 +553,11 @@ def move(game):
                             result = "Up"
             if moveDownPossible:
                 for segmentTela in game["you"]["body"]:
-                        if segmentTela["y"] <= game["you"]["head"]["y"]:
+                        if segmentTela["y"] < game["you"]["head"]["y"]:
                             print("SEGMENT NEKDE DOLE!!!")
                             head = game["you"]["head"]
                             ind = 1
+                            possible = None
                             while head["y"] > segmentTela["y"]:
                                 head["y"] -= ind
                                 possible = moveCheck(game, head)[1]
